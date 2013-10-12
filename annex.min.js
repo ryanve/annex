@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.0+201310120826
+ * annex 0.1.1+201310120834
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
