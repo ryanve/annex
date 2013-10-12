@@ -42,7 +42,7 @@
     effin = annex['fn'] = annex.prototype = Annex.prototype;
     
     function output(result, context) {
-        return context[chain] ? context[chain](result) : result;
+        return (context[chain] || annex)(result);
     }
     
     function prepare(inserts) {
@@ -63,8 +63,7 @@
     }
     
     function map(stack, fn, scope) {
-        for (var r = [], i = 0, l = stack.length; i < l; i++)
-            r[i] = fn.call(scope, stack[i], i, stack);
+        for (var r = [], i = 0, l = stack.length; i < l;) r[i] = fn.call(scope, stack[i++]);
         return r;
     }
     

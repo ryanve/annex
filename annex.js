@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.1+201310120834
+ * annex 0.1.2+201310122259
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
@@ -48,7 +48,7 @@
     effin = annex['fn'] = annex.prototype = Annex.prototype;
     
     function output(result, context) {
-        return context[chain] ? context[chain](result) : result;
+        return (context[chain] || annex)(result);
     }
     
     function prepare(inserts) {
@@ -69,8 +69,7 @@
     }
     
     function map(stack, fn, scope) {
-        for (var r = [], i = 0, l = stack.length; i < l; i++)
-            r[i] = fn.call(scope, stack[i], i, stack);
+        for (var r = [], i = 0, l = stack.length; i < l;) r[i] = fn.call(scope, stack[i++]);
         return r;
     }
     
