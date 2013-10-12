@@ -1,6 +1,6 @@
 {
     "name": "annex",
-    "description": "",
+    "description": "DOM insertion module",
     "version": "0.1.0",
     "homepage": "https://github.com/ryanve/annex",
     "license": "MIT",
