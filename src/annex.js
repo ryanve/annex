@@ -214,7 +214,7 @@
         return isNode(node = first(node)) ? node[inner[html]] : void 0;
     };
     
-    each(['text', 'html'], function(key) {
+    each([text, html], function(key) {
         effin[key] = function(str) {
             if (void 0 === str) return annex[key](this);
             return this['empty']()['append'](create[key](str, this));
