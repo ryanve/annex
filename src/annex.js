@@ -84,14 +84,17 @@
         return concat.apply(array, stack);
     }
      
+    /**
+     * @param {*=} context
+     * @return {Document}
+     */
     function owner(context) {
-        context = context && first(context);
-        return context && context.ownerDocument || doc;
+        context = first(context);
+        return context && (9 == context.nodeType ? context : context.ownerDocument) || doc;
     }
     
     function select(target, context) {
-        if (typeof target != 'string') return collect(target);
-        return output(doc, context)[find](target);
+        return (typeof target == 'string' ? output(doc, context)[find] : collect)(target);
     }
     
     function filter(stack, selector) {
