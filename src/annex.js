@@ -6,12 +6,12 @@
     var effin
       , inner = {}
       , chain = 'pushStack'
-      , removeData = 'removeData'
       , array = []
       , concat = array.concat
       , push = array.push
       , markup = /<|&#?\w+;/
       , resource = /<(?:script|style|link)/i
+      , cleaners = ['removeData', 'off']
       , doc = document
       , docElem = doc.documentElement
       , textContent = 'textContent'
@@ -22,7 +22,7 @@
     
     inner[text] = W3C ? textContent : 'innerText';
     inner[html] = 'innerHTML';
-    
+
     /**
      * @constructor
      * @param {(string|Node|Array|Object|null)=} item
@@ -100,6 +100,15 @@
     
     function filter(stack, selector) {
         return typeof selector == 'string' ? stack['filter'](selector) : stack;
+    }
+
+    function invoke(method) {
+        this[method] && this[method]();
+    }
+    
+    function cleanup(stack) {
+        each(cleaners, invoke, stack);
+        return stack;
     }
 
     /**
@@ -212,11 +221,6 @@
         node.parentNode && node.parentNode.removeChild(node);
     }
     annex['detach'] = detach;
-
-    function cleanup(stack) {
-        stack[removeData] && stack[removeData]();
-        return stack;
-    }
     
     /**
      * @param {string=} selector only works when filter exists
