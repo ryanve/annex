@@ -1,4 +1,4 @@
-!function(root, name, make) {
+(function(root, name, make) {
     if (typeof module != 'undefined' && module['exports']) module['exports'] = make();
     else root[name] = make();
 }(this, 'annex', function() {
@@ -26,16 +26,18 @@
 
     /**
      * @constructor
-     * @param {(string|Node|Array|Object|null)=} item
-     * @param {(Object|Node)=} context
+     * @param {(Node|{length:number}|string|null)=} item
+     * @param {(Node|{length:number}|null)=} context
      */
     function Annex(item, context) {
+        this.length = 0;
         push.apply(this, prepare.call(context, item));
     }
 
     /**
-     * @param {(string|Node|Array|Object|null)=} item
-     * @param {(Object|Node)=} context
+     * @param {(Node|{length:number}|string|null)=} item
+     * @param {(Node|{length:number}|null)=} context
+     * @return {Annex}
      */
     function annex(item, context) {
         return new Annex(item, context);
@@ -58,30 +60,51 @@
         return null == o || o.nodeType || o.window == o ? o : o[0];
     }
     
+    function flatten(stack) {
+        return concat.apply(array, stack);
+    }
+
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     */
     function each(stack, fn, scope) {
         for (var i = 0, l = stack.length; i < l;) fn.call(scope, stack[i++]);
         return stack;
     }
     
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     * @return {Array}
+     */
     function map(stack, fn, scope) {
         for (var r = [], i = 0, l = stack.length; i < l;) r[i] = fn.call(scope, stack[i++]);
         return r;
     }
     
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     */
     function eachApply(stack, fn, scope) {
         return each(stack, function(a) {
             fn.apply(scope, a);
         });
     }
     
+    /**
+     * @param {{length:number}} stack
+     * @param {string} key
+     * @return {string}
+     */
     function readAll(stack, key) {
         return map(stack, function(v) {
             return v && v[key] || '';
         }).join('');
-    }
-    
-    function flatten(stack) {
-        return concat.apply(array, stack);
     }
      
     /**
@@ -105,6 +128,11 @@
         this[method] && this[method]();
     }
     
+    
+    /**
+     * @param {{length:number}} stack
+     * @param {string=} selector
+     */
     function cleanup(stack, selector) {
         selector && !stack[find] || each(cleaners, invoke, selector ? stack[find](selector) : stack);
         return stack;
@@ -128,7 +156,7 @@
 
     /**
      * @param {string} str
-     * @param {(Array|Object|Node)=} context
+     * @param {(Node|{length:number}|null)=} context
      * @return {Array}
      */
     function build(str, context) {
@@ -143,7 +171,7 @@
     }
 
     /**
-     * @param {Array|Object|Node} node
+     * @param {Node|{length:number}} node
      * @return {Array}
      */
     function clone(node) {
@@ -157,8 +185,8 @@
     };
     
     /**
-     * @param {string|Array|Object|Node} what
-     * @param {(Array|Object|Node)=} context
+     * @param {string|{length:number}|Node} what
+     * @param {({length:number}|Node)=} context
      * @return {Array}
      */
     function create(what, context) {
@@ -172,14 +200,14 @@
     });
     
     /**
-     * @param {Array|Object|Node} node or collection
+     * @param {{length:number}|Node} node or collection
      */
     annex[text] = function(node) {
         return readAll(collect(node), inner[text]);
     };
     
     /**
-     * @param {Array|Object|Node} node
+     * @param {{length:number}|Node} node
      * @return {string|undefined}
      */
     annex[html] = function(node) {
@@ -194,7 +222,7 @@
     });
     
     /**
-     * @this {Array|Object}
+     * @this {{length:number}}
      * @param {Node} parent
      */
     function appendTo(parent) {
@@ -202,7 +230,7 @@
     }
     
     /**
-     * @this {Array|Object}
+     * @this {{length:number}}
      * @param {Node} parent
      */
     function prependTo(parent) {
@@ -222,7 +250,7 @@
             return each(this, handler, flatten(map(arguments, prepare, this)));
         };
         effin[key + 'To'] = function(target) {
-            each(select(target), handler, this);
+            each(select(target, this), handler, this);
             return this;
         };
     });
@@ -273,4 +301,4 @@
     };
 
     return annex;
-});
+}));
