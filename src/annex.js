@@ -74,11 +74,6 @@
         });
     }
     
-    function ary(stack) {
-        for (var pure = [], i = 0, l = stack.length; i < l;) pure[i] = stack[i++];
-        return pure;
-    }
-    
     function readAll(stack, key) {
         return map(stack, function(v) {
             return v && v[key] || '';
@@ -118,18 +113,36 @@
     function isNode(o) {
         return !!o && o.nodeType || false;
     }
+    
+    /**
+     * @param {Node} parent
+     * @return {Array}
+     */
+    function contents(parent) {
+        for (var r = [], n = parent.firstChild; n; n = n.nextSibling) r.push(n);
+        return r;
+    }
 
+    /**
+     * @param {string} str
+     * @param {(Array|Object|Node)=} context
+     * @return {Array}
+     */
     function build(str, context) {
-        var els, parent;
+        var nodes, parent;
         if (resource.test(str)) return [];
         if (!markup.test(str)) return [create[text](str, context)];
         parent = create[element]('div', context);
         parent[inner[html]] = str;
-        els = ary(parent.getElementsByTagName('*'));
+        nodes = contents(parent);
         empty(parent);
-        return els;
+        return nodes;
     }
 
+    /**
+     * @param {Array|Object|Node} node
+     * @return {Array}
+     */
     function clone(node) {
         return map(collect(node), function(n) {
             return n.cloneNode(true);
@@ -140,6 +153,11 @@
         return output(clone(this), this);
     };
     
+    /**
+     * @param {string|Array|Object|Node} what
+     * @param {(Array|Object|Node)=} context
+     * @return {Array}
+     */
     function create(what, context) {
         return typeof what == 'string' ? build(what, context) : clone(what);
     }
