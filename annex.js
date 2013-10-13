@@ -1,10 +1,10 @@
 /*!
- * annex 0.1.2+201310130323
+ * annex 0.1.3+201310130811
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
 
-!function(root, name, make) {
+(function(root, name, make) {
     if (typeof module != 'undefined' && module['exports']) module['exports'] = make();
     else root[name] = make();
 }(this, 'annex', function() {
@@ -32,16 +32,18 @@
 
     /**
      * @constructor
-     * @param {(string|Node|Array|Object|null)=} item
-     * @param {(Object|Node)=} context
+     * @param {(Node|{length:number}|string|null)=} item
+     * @param {(Node|{length:number}|null)=} context
      */
     function Annex(item, context) {
-        push.apply(this, prepare(item, context));
+        this.length = 0;
+        push.apply(this, prepare.call(context, item));
     }
 
     /**
-     * @param {(string|Node|Array|Object|null)=} item
-     * @param {(Object|Node)=} context
+     * @param {(Node|{length:number}|string|null)=} item
+     * @param {(Node|{length:number}|null)=} context
+     * @return {Annex}
      */
     function annex(item, context) {
         return new Annex(item, context);
@@ -57,52 +59,71 @@
     }
     
     function collect(o) {
-        return null == o ? [] : o.nodeType ? [o] : o;
+        return null == o ? [] : o.nodeType || o.window != o ? [o] : o;
     }
     
     function first(o) {
-        return null == o || 0 < o.nodeType ? o : o[0];
+        return null == o || o.nodeType || o.window == o ? o : o[0];
     }
     
+    function flatten(stack) {
+        return concat.apply(array, stack);
+    }
+
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     */
     function each(stack, fn, scope) {
         for (var i = 0, l = stack.length; i < l;) fn.call(scope, stack[i++]);
         return stack;
     }
     
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     * @return {Array}
+     */
     function map(stack, fn, scope) {
         for (var r = [], i = 0, l = stack.length; i < l;) r[i] = fn.call(scope, stack[i++]);
         return r;
     }
     
+    /**
+     * @param {{length:number}} stack
+     * @param {Function} fn
+     * @param {*=} scope
+     */
     function eachApply(stack, fn, scope) {
         return each(stack, function(a) {
             fn.apply(scope, a);
         });
     }
     
-    function ary(stack) {
-        for (var pure = [], i = 0, l = stack.length; i < l;) pure[i] = stack[i++];
-        return pure;
-    }
-    
+    /**
+     * @param {{length:number}} stack
+     * @param {string} key
+     * @return {string}
+     */
     function readAll(stack, key) {
         return map(stack, function(v) {
             return v && v[key] || '';
         }).join('');
     }
-    
-    function flatten(stack) {
-        return concat.apply(array, stack);
-    }
      
-    function owner(context) {
-        context = context && first(context);
-        return context && context.ownerDocument || doc;
+    /**
+     * @param {*=} o context
+     * @return {Document}
+     */
+    function owner(o) {
+        o = first(o);
+        return o && (9 == o.nodeType ? o : o[o.window == o ? 'document' : 'ownerDocument']) || doc;
     }
     
     function select(target, context) {
-        if (typeof target != 'string') return collect(target);
-        return output(doc, context)[find](target);
+        return (typeof target == 'string' ? output(doc, context)[find] : collect)(target);
     }
     
     function filter(stack, selector) {
@@ -113,6 +134,11 @@
         this[method] && this[method]();
     }
     
+    
+    /**
+     * @param {{length:number}} stack
+     * @param {string=} selector
+     */
     function cleanup(stack, selector) {
         selector && !stack[find] || each(cleaners, invoke, selector ? stack[find](selector) : stack);
         return stack;
@@ -122,20 +148,38 @@
      * @return {number|boolean}
      */
     function isNode(o) {
-        return !!o && o.nodeType || false;
+        return o && o.nodeType || false;
+    }
+    
+    /**
+     * @param {Node} parent
+     * @return {Array}
+     */
+    function contents(parent) {
+        for (var r = [], n = parent.firstChild; n; n = n.nextSibling) r.push(n);
+        return r;
     }
 
+    /**
+     * @param {string} str
+     * @param {(Node|{length:number}|null)=} context
+     * @return {Array}
+     */
     function build(str, context) {
-        var els, parent;
+        var nodes, parent;
         if (resource.test(str)) return [];
         if (!markup.test(str)) return [create[text](str, context)];
         parent = create[element]('div', context);
         parent[inner[html]] = str;
-        els = ary(parent.getElementsByTagName('*'));
+        nodes = contents(parent);
         empty(parent);
-        return els;
+        return nodes;
     }
 
+    /**
+     * @param {Node|{length:number}} node
+     * @return {Array}
+     */
     function clone(node) {
         return map(collect(node), function(n) {
             return n.cloneNode(true);
@@ -146,6 +190,11 @@
         return output(clone(this), this);
     };
     
+    /**
+     * @param {string|{length:number}|Node} what
+     * @param {({length:number}|Node)=} context
+     * @return {Array}
+     */
     function create(what, context) {
         return typeof what == 'string' ? build(what, context) : clone(what);
     }
@@ -157,14 +206,14 @@
     });
     
     /**
-     * @param {Array|Object|Node} node or collection
+     * @param {{length:number}|Node} node or collection
      */
     annex[text] = function(node) {
         return readAll(collect(node), inner[text]);
     };
     
     /**
-     * @param {Array|Object|Node} node
+     * @param {{length:number}|Node} node
      * @return {string|undefined}
      */
     annex[html] = function(node) {
@@ -179,7 +228,7 @@
     });
     
     /**
-     * @this {Array|Object}
+     * @this {{length:number}}
      * @param {Node} parent
      */
     function appendTo(parent) {
@@ -187,7 +236,7 @@
     }
     
     /**
-     * @this {Array|Object}
+     * @this {{length:number}}
      * @param {Node} parent
      */
     function prependTo(parent) {
@@ -207,7 +256,7 @@
             return each(this, handler, flatten(map(arguments, prepare, this)));
         };
         effin[key + 'To'] = function(target) {
-            each(select(target), handler, this);
+            each(select(target, this), handler, this);
             return this;
         };
     });
@@ -258,4 +307,4 @@
     };
 
     return annex;
-});
+}));
