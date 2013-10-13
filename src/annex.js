@@ -30,7 +30,7 @@
      * @param {(Object|Node)=} context
      */
     function Annex(item, context) {
-        push.apply(this, prepare(item, context));
+        push.apply(this, prepare.call(context, item));
     }
 
     /**
@@ -51,11 +51,11 @@
     }
     
     function collect(o) {
-        return null == o ? [] : o.nodeType ? [o] : o;
+        return null == o ? [] : o.nodeType || o.window != o ? [o] : o;
     }
     
     function first(o) {
-        return null == o || o.nodeType ? o : o[0];
+        return null == o || o.nodeType || o.window == o ? o : o[0];
     }
     
     function each(stack, fn, scope) {
@@ -85,12 +85,12 @@
     }
      
     /**
-     * @param {*=} context
+     * @param {*=} o context
      * @return {Document}
      */
-    function owner(context) {
-        context = first(context);
-        return context && (9 == context.nodeType ? context : context.ownerDocument) || doc;
+    function owner(o) {
+        o = first(o);
+        return o && (9 == o.nodeType ? o : o[o.window == o ? 'document' : 'ownerDocument']) || doc;
     }
     
     function select(target, context) {
@@ -114,7 +114,7 @@
      * @return {number|boolean}
      */
     function isNode(o) {
-        return !!o && o.nodeType || false;
+        return o && o.nodeType || false;
     }
     
     /**
