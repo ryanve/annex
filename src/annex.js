@@ -55,7 +55,7 @@
     }
     
     function first(o) {
-        return null == o || 0 < o.nodeType ? o : o[0];
+        return null == o || o.nodeType ? o : o[0];
     }
     
     function each(stack, fn, scope) {
