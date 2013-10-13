@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.2+201310130105
+ * annex 0.1.2+201310130323
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
@@ -23,8 +23,9 @@
       , textContent = 'textContent'
       , W3C = textContent in docElem
       , element = 'element'
-      , text = 'text'
-      , html = 'html';
+      , find = 'find'
+      , html = 'html'
+      , text = 'text';
     
     inner[text] = W3C ? textContent : 'innerText';
     inner[html] = 'innerHTML';
@@ -99,9 +100,9 @@
         return context && context.ownerDocument || doc;
     }
     
-    function find(target, context) {
+    function select(target, context) {
         if (typeof target != 'string') return collect(target);
-        return output(doc, context)['find'](target);
+        return output(doc, context)[find](target);
     }
     
     function filter(stack, selector) {
@@ -112,8 +113,8 @@
         this[method] && this[method]();
     }
     
-    function cleanup(stack) {
-        each(cleaners, invoke, stack);
+    function cleanup(stack, selector) {
+        selector && !stack[find] || each(cleaners, invoke, selector ? stack[find](selector) : stack);
         return stack;
     }
 
@@ -206,7 +207,7 @@
             return each(this, handler, flatten(map(arguments, prepare, this)));
         };
         effin[key + 'To'] = function(target) {
-            each(find(target), handler, this);
+            each(select(target), handler, this);
             return this;
         };
     });
@@ -240,7 +241,8 @@
      * @param {string=} selector only works when filter exists
      */
     effin['remove'] = function(selector) {
-        each(cleanup(filter(this, selector)), detach);
+        // Filter, clean descendants, clean self, detach.
+        each(cleanup(cleanup(filter(this, selector), '*')), detach);
         return this;
     };
 
@@ -252,7 +254,7 @@
     }
     annex['empty'] = empty;
     effin['empty'] = function() {
-        return each(cleanup(this), empty);
+        return each(cleanup(this, '*'), empty);
     };
 
     return annex;
