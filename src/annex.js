@@ -53,7 +53,7 @@
     }
     
     function collect(o) {
-        return null == o ? [] : o.nodeType || o.window != o ? [o] : o;
+        return null == o ? [] : o.nodeType || o.window == o ? [o] : o;
     }
     
     function first(o) {

@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.3+201310130811
+ * annex 0.1.4+201310220548
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
@@ -59,7 +59,7 @@
     }
     
     function collect(o) {
-        return null == o ? [] : o.nodeType || o.window != o ? [o] : o;
+        return null == o ? [] : o.nodeType || o.window == o ? [o] : o;
     }
     
     function first(o) {
@@ -220,7 +220,7 @@
         return isNode(node = first(node)) ? node[inner[html]] : void 0;
     };
     
-    each(['text', 'html'], function(key) {
+    each([text, html], function(key) {
         effin[key] = function(str) {
             if (void 0 === str) return annex[key](this);
             return this['empty']()['append'](create[key](str, this));

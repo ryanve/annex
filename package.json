@@ -1,7 +1,7 @@
 {
     "name": "annex",
     "description": "DOM insertion module",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "homepage": "https://github.com/ryanve/annex",
     "license": "MIT",
     "author": "Ryan Van Etten",
