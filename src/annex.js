@@ -63,16 +63,6 @@
     function flatten(stack) {
         return concat.apply(array, stack);
     }
-
-    /**
-     * @param {{length:number}} stack
-     * @param {Function} fn
-     * @param {*=} scope
-     */
-    function each(stack, fn, scope) {
-        for (var i = 0, l = stack.length; i < l;) fn.call(scope, stack[i++]);
-        return stack;
-    }
     
     /**
      * @param {{length:number}} stack
@@ -84,6 +74,18 @@
         for (var r = [], i = 0, l = stack.length; i < l;) r[i] = fn.call(scope, stack[i++]);
         return r;
     }
+
+    /**
+     * @param {{length:number}} stack
+     * @param {Function|Object} fn
+     * @param {?*=} scope
+     * @param {?string=} call method
+     */
+    function each(stack, fn, scope, call) {
+        call = call || 'call';
+        for (var i = 0, l = stack.length; i < l;) fn[call](scope, stack[i++]);
+        return stack;
+    }
     
     /**
      * @param {{length:number}} stack
@@ -91,9 +93,7 @@
      * @param {*=} scope
      */
     function eachApply(stack, fn, scope) {
-        return each(stack, function(a) {
-            fn.apply(scope, a);
-        });
+        return each(stack, fn, scope, 'apply');
     }
     
     /**
