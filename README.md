@@ -1,7 +1,42 @@
 # [annex](../../)
+#### DOM insertion [module](https://npmjs.org/package/annex)
 
-#### DOM insertion module
+## API ([0.1](../../releases))
+### `annex()` &rArr; instance
+#### `annex(markup|node|stack)`
 
-## [MIT License](http://opensource.org/licenses/MIT)
+```js
+annex('<a href="/">home</a>').appendTo(document.body) // annex(markup) example
+annex(document.body).append('<a href="/">home</a>') // annex(node) example
+annex(document.querySelectorAll('.example')).remove() // annex(stack) example
+```
 
-Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)
+### Chain
+#### jQuery-compatible [syntax](http://api.jquery.com/category/manipulation/dom-insertion-inside/)
+- `.html(string?)` Get or set.
+- `.text(string?)` Get or set.
+- `.after(content...)` Insert content. 
+- `.before(content...)` Insert content.
+- `.append(content...)` Insert content. 
+- `.prepend(content...)` Insert content.
+- `.appendTo(target)` Insert into target.
+- `.prependTo(target)` Insert into target.
+- `.detach()` Detach nodes from DOM for later use.
+- `.remove()` Detach nodes from DOM and purge.
+- `.empty()` Empty nodes.
+- `.clone()` Clone nodes.
+
+### Static
+#### Fast simple static methods
+- `annex.text(node)` Get.
+- `annex.html(node)` Get. 
+- `annex.detach(node)` Detach from DOM.
+- `annex.empty(node)` Empty node.
+
+## Fund
+
+[Fund opensource dev](https://www.gittip.com/ryanve/) <b>=)</b>
+
+## License
+
+[MIT](package.json)
