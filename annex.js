@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.5+201311260100
+ * annex 0.1.6+201311261130
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
@@ -102,6 +102,17 @@
     }
     
     /**
+     * @description Bulk insertion adapter. Nodes must be cloned to insert into secondary targets.
+     * @param {{length:number}} targets
+     * @param {Function} fn
+     * @param {{length:number}} inserts
+     */
+    function bulk(targets, fn, inserts) {
+        for (var i = 0, l = targets.length; i < l;) fn.call(i ? clone(inserts) : inserts, targets[i++]);
+        return targets;
+    }
+    
+    /**
      * @param {{length:number}} stack
      * @param {string} key
      * @return {string}
@@ -176,13 +187,19 @@
     }
 
     /**
+     * @param {Node} n
+     * @return {Node}
+     */
+    function cloneNode(n) {
+        return n.cloneNode(true);
+    }
+    
+    /**
      * @param {Node|{length:number}} node
      * @return {Array}
      */
     function clone(node) {
-        return map(collect(node), function(n) {
-            return n.cloneNode(true);
-        });
+        return map(collect(node), cloneNode);
     }
     
     effin['clone'] = function() {
@@ -252,17 +269,17 @@
 
     eachApply([['prepend', prependTo], ['append', appendTo]], function(key, handler) {
         effin[key] = function() {
-            return each(this, handler, flatten(map(arguments, prepare, this)));
+            return bulk(this, handler, flatten(map(arguments, prepare, this)));
         };
         effin[key + 'To'] = function(target) {
-            each(select(target, this), handler, this);
+            bulk(select(target, this), handler, this);
             return this;
         };
     });
     
     eachApply([['after', 'nextSibling'], ['before']], function(key, next) {
         effin[key] = function() {
-            return each(this, function(reference) {
+            return bulk(this, function(reference) {
                 var parent = reference && reference.parentNode;
                 parent && each(this, insertBefore, [parent, next ? reference[next] : reference]);
             }, flatten(map(arguments, prepare, this)));
