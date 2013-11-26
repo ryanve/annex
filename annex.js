@@ -1,5 +1,5 @@
 /*!
- * annex 0.1.5+201311252031
+ * annex 0.1.5+201311260100
  * https://github.com/ryanve/annex
  * MIT License 2013 Ryan Van Etten
  */
@@ -9,8 +9,8 @@
     else root[name] = make();
 }(this, 'annex', function() {
 
-    var effin
-      , inner = {}
+    var inner = {}
+      , effin = annex['fn'] = annex.prototype = Annex.prototype
       , chain = 'pushStack'
       , array = []
       , concat = array.concat
@@ -48,7 +48,6 @@
     function annex(item, context) {
         return new Annex(item, context);
     }
-    effin = annex['fn'] = annex.prototype = Annex.prototype;
     
     function output(result, context) {
         return (context[chain] || annex)(result);

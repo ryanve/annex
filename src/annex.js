@@ -3,8 +3,8 @@
     else root[name] = make();
 }(this, 'annex', function() {
 
-    var effin
-      , inner = {}
+    var inner = {}
+      , effin = annex['fn'] = annex.prototype = Annex.prototype
       , chain = 'pushStack'
       , array = []
       , concat = array.concat
@@ -42,7 +42,6 @@
     function annex(item, context) {
         return new Annex(item, context);
     }
-    effin = annex['fn'] = annex.prototype = Annex.prototype;
     
     function output(result, context) {
         return (context[chain] || annex)(result);
