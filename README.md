@@ -36,10 +36,12 @@ annex(document.querySelectorAll('.example')).remove() // annex(stack) example
 #### Fast simple static methods
 - `annex.text(node)` Get.
 - `annex.html(node)` Get.
+- `annex.contents(node)` Get nodes.
 - `annex.tag(node)` Get markup string.
 - `annex.tags(nodes)` Get markup array.
 - `annex.detach(node)` Detach from DOM.
 - `annex.empty(node)` Empty node.
+- `annex.owner(node)` Get owner document.
 
 ## Fund
 
