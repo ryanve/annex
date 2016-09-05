@@ -1,5 +1,5 @@
 /*!
- * annex 0.3.0+201609050814
+ * annex 0.3.0+201609050819
  * https://github.com/ryanve/annex
  * @license MIT
  */
@@ -184,7 +184,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {string} markup
    */
   function tag(nodes) {
@@ -196,7 +196,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {Array} markup
    */
   function tags(nodes) {
