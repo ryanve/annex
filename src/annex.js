@@ -3,7 +3,6 @@
   else root[name] = make();
 }(this, 'annex', function() {
 
-  var inner = {};
   var effin = annex.prototype = Annex.prototype;
   var chain = 'pushStack';
   var array = [];
@@ -20,7 +19,7 @@
   var find = 'find';
   var html = 'html';
   var text = 'text';
-
+  var inner = {};
   inner[text] = W3C ? textContent : 'innerText';
   inner[html] = 'innerHTML';
 
@@ -180,7 +179,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {string} markup
    */
   function tag(nodes) {
@@ -192,7 +191,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {Array} markup
    */
   function tags(nodes) {
