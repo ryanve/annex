@@ -1,5 +1,5 @@
 /*!
- * annex 0.2.0+201609050234
+ * annex 0.3.0+201609050237
  * https://github.com/ryanve/annex
  * @license MIT
  */
