@@ -1,5 +1,5 @@
 /*!
- * annex 0.2.0+201609050229
+ * annex 0.2.0+201609050234
  * https://github.com/ryanve/annex
  * @license MIT
  */
@@ -9,7 +9,7 @@
 }(this, 'annex', function() {
 
   var inner = {};
-  var effin = annex['fn'] = annex.prototype = Annex.prototype;
+  var effin = annex.prototype = Annex.prototype;
   var chain = 'pushStack';
   var array = [];
   var concat = array.concat;

@@ -4,7 +4,7 @@
 }(this, 'annex', function() {
 
   var inner = {};
-  var effin = annex['fn'] = annex.prototype = Annex.prototype;
+  var effin = annex.prototype = Annex.prototype;
   var chain = 'pushStack';
   var array = [];
   var concat = array.concat;
