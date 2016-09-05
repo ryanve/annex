@@ -19,9 +19,11 @@ annex(document.querySelectorAll('.example')).remove() // annex(stack) example
 #### jQuery-compatible [syntax](http://api.jquery.com/category/manipulation/dom-insertion-inside/)
 - `.html(string?)` Get or set.
 - `.text(string?)` Get or set.
-- `.after(content...)` Insert content. 
+- `.tag()` Get markup string.
+- `.tags()` Get markup array.
+- `.after(content...)` Insert content.
 - `.before(content...)` Insert content.
-- `.append(content...)` Insert content. 
+- `.append(content...)` Insert content.
 - `.prepend(content...)` Insert content.
 - `.appendTo(target)` Insert into target.
 - `.prependTo(target)` Insert into target.
@@ -33,9 +35,13 @@ annex(document.querySelectorAll('.example')).remove() // annex(stack) example
 ### Static
 #### Fast simple static methods
 - `annex.text(node)` Get.
-- `annex.html(node)` Get. 
+- `annex.html(node)` Get.
+- `annex.contents(node)` Get nodes.
+- `annex.tag(node)` Get markup string.
+- `annex.tags(nodes)` Get markup array.
 - `annex.detach(node)` Detach from DOM.
 - `annex.empty(node)` Empty node.
+- `annex.owner(node)` Get owner document.
 
 ## Fund
 

@@ -1,5 +1,5 @@
 /*!
- * annex 0.2.0+201609050054
+ * annex 0.3.0+201609050237
  * https://github.com/ryanve/annex
  * @license MIT
  */
@@ -9,7 +9,7 @@
 }(this, 'annex', function() {
 
   var inner = {};
-  var effin = annex['fn'] = annex.prototype = Annex.prototype;
+  var effin = annex.prototype = Annex.prototype;
   var chain = 'pushStack';
   var array = [];
   var concat = array.concat;
@@ -185,6 +185,26 @@
   }
 
   /**
+   * @param {(Node|{length:number}} nodes
+   * @return {string} markup
+   */
+  function tag(nodes) {
+    var parent = create[element]('div', owner(nodes));
+    appendTo.call(clone(nodes), parent);
+    var markup = annex[html](parent);
+    empty(parent);
+    return markup;
+  }
+
+  /**
+   * @param {(Node|{length:number}} nodes
+   * @return {Array} markup
+   */
+  function tags(nodes) {
+    return map(collect(nodes), tag);
+  }
+
+  /**
    * @param {Node} n
    * @return {Node}
    */
@@ -321,5 +341,17 @@
     return each(cleanup(this, '*'), empty);
   };
 
+  annex['tag'] = tag;
+  effin['tag'] = function() {
+    return tag(this);
+  };
+
+  annex['tags'] = tags;
+  effin['tags'] = function() {
+    return tags(this);
+  };
+
+  annex['contents'] = contents;
+  annex['owner'] = owner;
   return annex;
 });
