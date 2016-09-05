@@ -1,5 +1,5 @@
 /*!
- * annex 0.2.0+201609050048
+ * annex 0.2.0+201609050054
  * https://github.com/ryanve/annex
  * @license MIT
  */
@@ -142,7 +142,6 @@
   function invoke(method) {
     this[method] && this[method]();
   }
-
 
   /**
    * @param {{length:number}} stack
