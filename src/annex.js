@@ -179,7 +179,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {string} markup
    */
   function tag(nodes) {
@@ -191,7 +191,7 @@
   }
 
   /**
-   * @param {(Node|{length:number}} nodes
+   * @param {Node|{length:number}} nodes
    * @return {Array} markup
    */
   function tags(nodes) {
