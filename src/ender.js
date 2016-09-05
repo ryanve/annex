@@ -1,1 +1,3 @@
-(typeof ender == 'function' && ender['ender'](require('annex')['fn'], true));
+if (typeof ender == 'function') {
+  ender.ender(require('annex').prototype, true);
+}

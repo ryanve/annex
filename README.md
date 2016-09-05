@@ -1,7 +1,11 @@
-# [annex](../../)
-#### DOM insertion [module](https://npmjs.org/package/annex)
+# annex
+<b>DOM insertion module</b>
 
-## API ([0.1](../../releases))
+```sh
+npm install annex --save
+```
+
+## API
 ### `annex()` &rArr; instance
 #### `annex(markup|node|stack)`
 

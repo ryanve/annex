@@ -1,21 +1,48 @@
 {
-    "name": "annex",
-    "description": "DOM insertion module",
-    "version": "0.1.6",
-    "homepage": "https://github.com/ryanve/annex",
-    "license": "MIT",
-    "author": "Ryan Van Etten",
-    "keywords": ["dom", "insertion", "nodes", "ender"],
-    "main": "./annex.js",
-    "ender": "./src/ender.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ryanve/annex.git"
-    }, 
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-uglify": "~0.2.4",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-contrib-jshint": "~0.6.4"
-    }
+  "name": "annex",
+  "description": "DOM insertion module",
+  "version": "0.2.0",
+  "homepage": "https://github.com/ryanve/annex",
+  "license": "MIT",
+  "author": "Ryan Van Etten",
+  "keywords": ["dom", "insertion", "nodes", "browser", "ender"],
+  "main": "./annex.js",
+  "ender": "./src/ender.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanve/annex.git"
+  },
+  "devDependencies": {
+    "universal": "~0.1.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.6.4"
+  },
+  "jshintConfig": {
+    "asi": false,
+    "boss": true,
+    "browser": true,
+    "debug": true,
+    "devel": true,
+    "eqnull": true,
+    "evil": true,
+    "expr": true,
+    "globals": {"ender": true},
+    "jquery": true,
+    "lastsemic": true,
+    "latedef": "nofunc",
+    "laxcomma": true,
+    "maxcomplexity": 10,
+    "maxerr": 10,
+    "maxlen": 115,
+    "maxparams": 4,
+    "node": true,
+    "sub": true,
+    "supernew": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "worker": true
+  }
 }
