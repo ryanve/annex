@@ -346,5 +346,7 @@
     return tags(this);
   };
 
+  annex['contents'] = contents;
+  annex['owner'] = owner;
   return annex;
 });

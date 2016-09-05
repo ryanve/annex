@@ -1,5 +1,5 @@
 /*!
- * annex 0.2.0+201609050216
+ * annex 0.2.0+201609050229
  * https://github.com/ryanve/annex
  * @license MIT
  */
@@ -351,5 +351,7 @@
     return tags(this);
   };
 
+  annex['contents'] = contents;
+  annex['owner'] = owner;
   return annex;
 });
