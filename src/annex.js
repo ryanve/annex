@@ -138,7 +138,6 @@
     this[method] && this[method]();
   }
 
-
   /**
    * @param {{length:number}} stack
    * @param {string=} selector
